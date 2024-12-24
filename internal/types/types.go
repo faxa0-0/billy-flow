@@ -12,11 +12,12 @@ type User struct {
 }
 
 type Usage struct {
+	ID         int    `json:"id"`
 	CustomerID int    `json:"customer_id"`
 	Youtube    uint64 `json:"youtube"` //kb
 	Netflix    uint64 `json:"netflix"`
 	Spotify    uint64 `json:"spotify"`
-	Base       uint64 `json:"basic"`
+	Basic       uint64 `json:"basic"`
 }
 
 type Invoices struct {

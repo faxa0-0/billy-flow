@@ -4,10 +4,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/faxa0-0/billy-flow/internal/config"
+	"github.com/faxa0-0/billy-flow/internal/db"
 	"github.com/faxa0-0/billy-flow/internal/handlers"
 )
 
 func main() {
+	cfg := config.LoadEnv()
+
+	err := db.Initialize(cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("POST /auth/login", handlers.Login) //all
@@ -22,5 +31,6 @@ func main() {
 	mux.HandleFunc("POST /invoice", handlers.GenerateInvoice) // admin
 	mux.HandleFunc("GET /invoice/{id}", handlers.GetInvoice)  //all
 
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	log.Print("Server started at http://" + cfg.FormatAddr())
+	log.Fatal(http.ListenAndServe(cfg.FormatAddr(), mux))
 }
